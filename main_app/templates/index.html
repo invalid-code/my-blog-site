@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>this is my blog site</title>
-</head>
+{% block title%}this is my blog site{% endblock %}
 
-<body>
-    <h1>hello world</h1>
-</body>
-
-</html>
+{% block content %}
+<img src="{% static 'images/placeholder.jpg' %}">
+<div class="flex flex-row justify-center">
+    <input type="text" name="search-bar" placeholder="Search...">
+</div>
+{% endblock %}
