@@ -5,6 +5,7 @@
 
 {% block content %}
 <h1>blogs</h1>
+<a href="{% url 'new_blog' %}">New Blog</a>
 {% for blog in blogs %}
 <h2>
     <a href="{% url 'blog' blog.id_str %}">{{ blog.title }}</a>
