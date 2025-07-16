@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"><!-- 9CAFB7, 157145, F02D3A, DDA15E, ACE894 -->
     <title>{% block title %}{% endblock %}</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.7.1.min.js"></script>
     <link href="{% static 'styles/output.css' %}" rel="stylesheet">
 </head>
 
@@ -18,7 +19,7 @@
             <li class="m-1"><a href="https://github.com/invalid-code">Github</a></li>
         </ol>
     </nav>
-    {% block content %}{% endblock %}
+    {% block content %}{% endblock %}{% block scipts %}{% endblock %}
 </body>
 
 </html>

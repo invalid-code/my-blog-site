@@ -1,8 +1,35 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}todo{% endblock %}
+{% block title%}{{ blog.title }}{% endblock %}
 
 {% block content %}
-todo
+<form action="{% url 'blog' blog.id %}" method="post" id="blog-form">
+    {% csrf_token %}
+    <h1 id="edit-title">{{ blog.title }}</h1>
+    <p id="edit-content" >{{ blog.content }}</p>
+    <button type="button" id="edit-btn">Edit</button>
+</form>
+{% endblock %}
+
+{% block scipts %}
+<script>
+    $(document).ready(() => {
+        let editBtn = $("#edit-btn");
+        editBtn.click((event) => {
+            event.preventDefault();
+            if (editBtn.text() == "Edit") {
+                let titleElem = $("#edit-title");
+                let oldTitle = titleElem.text();
+                titleElem.replaceWith(`<div><input type="text" value="${oldTitle}" name="title"></div>`);
+                let contentElem = $("#edit-content");
+                let oldContent = contentElem.text();
+                contentElem.replaceWith(`<div><input type="text" value="${oldContent}" name="content"></div>`);
+                editBtn.text("Update");
+            } else {
+                $("#blog-form").submit();
+            }
+        });
+    });
+</script>
 {% endblock %}

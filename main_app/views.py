@@ -1,6 +1,6 @@
 from bson.objectid import ObjectId
 from django import forms
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 
 from my_blog_website.settings import client
 
@@ -27,7 +27,16 @@ def blogs_page(request):
 
 def blog_page(request, id: str):
     document_id = ObjectId(id)
-    blog = blogs_collection.find({"_id": document_id})
+    if request.method == "POST":
+        res = blogs_collection.update_one(
+            {"_id": document_id},
+            {"$set": {
+                "title": request.POST.get("title", ""),
+                "content": request.POST.get("content", "")
+            }
+        })
+    blog_document = blogs_collection.find_one({"_id": document_id})
+    blog = {"id": blog_document["_id"], "title": blog_document["title"], "content": blog_document["content"]}
     return render(request, "blog.html", {"blog": blog})
 
 def new_blog_page(request):
