@@ -20,21 +20,38 @@ def about_me_page(request):
 
 def blogs_page(request):
     projection = {"title": 1, "_id": 1}
-    blog_documents = list(blogs_collection.find({}, projection))
+    blog_documents = blogs_collection.find({}, projection)
+    blogs: list[dict[str, str]] = []
     for blog_document in blog_documents:
-        blog_document["id_str"] = blog_document["_id"]
-    return render(request, "blogs.html", {"blogs": blog_documents})
+        blogs.append({
+            "id_str": str(blog_document["_id"]),
+            "title": blog_document["title"],
+        })
+    return render(request, "blogs.html", {"blogs": blogs})
 
 def blog_page(request, id: str):
     document_id = ObjectId(id)
     if request.method == "POST":
-        res = blogs_collection.update_one(
-            {"_id": document_id},
-            {"$set": {
-                "title": request.POST.get("title", ""),
-                "content": request.POST.get("content", "")
-            }
-        })
+        match request.POST.get("action"):
+            case "update":
+                blogs_collection.update_one(
+                    {"_id": document_id},
+                    {"$set": {
+                        "title": request.POST.get("title", ""),
+                        "content": request.POST.get("content", "")
+                    }
+                })
+            case "delete":
+                blogs_collection.delete_one({"_id": document_id})
+                projection = {"title": 1, "_id": 1}
+                blog_documents = blogs_collection.find({}, projection)
+                blogs: list[dict[str, str]] = []
+                for blog_document in blog_documents:
+                    blogs.append({
+                        "id_str": str(blog_document["_id"]),
+                        "title": blog_document["title"],
+                    })
+                return render(request, "blogs.html", {"blogs": blogs})
     blog_document = blogs_collection.find_one({"_id": document_id})
     blog = {"id": blog_document["_id"], "title": blog_document["title"], "content": blog_document["content"]}
     return render(request, "blog.html", {"blog": blog})
@@ -47,8 +64,12 @@ def new_blog_page(request):
             content = blog_form.cleaned_data["content"]
             blogs_collection.insert_one({"title": title, "content": content})
             projection = {"title": 1, "_id": 1}
-            blog_documents = list(blogs_collection.find({}, projection))
+            blog_documents = blogs_collection.find({}, projection)
+            blogs: list[dict[str, str]] = []
             for blog_document in blog_documents:
-                blog_document["id_str"] = blog_document["_id"]
-            return render(request, "blogs.html", {"blogs": blog_documents})
+                blogs.append({
+                    "id_str": str(blog_document["_id"]),
+                    "title": blog_document["title"],
+                })
+            return render(request, "blogs.html", {"blogs": blogs})
     return render(request, "new_blog.html", {"form": BlogForm()})

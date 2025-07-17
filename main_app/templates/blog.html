@@ -7,8 +7,10 @@
 <form action="{% url 'blog' blog.id %}" method="post" id="blog-form">
     {% csrf_token %}
     <h1 id="edit-title">{{ blog.title }}</h1>
-    <p id="edit-content" >{{ blog.content }}</p>
+    <p id="edit-content">{{ blog.content }}</p>
+    <input type="hidden" name="action" value="update">
     <button type="button" id="edit-btn">Edit</button>
+    <button type="button" id="cancel-btn">Cancel</button>
 </form>
 {% endblock %}
 
@@ -16,19 +18,33 @@
 <script>
     $(document).ready(() => {
         let editBtn = $("#edit-btn");
+        let cancelBtn = $("#cancel-btn");
+        let title = "";
+        let content = "";
+        cancelBtn.hide();
         editBtn.click((event) => {
             event.preventDefault();
             if (editBtn.text() == "Edit") {
+                cancelBtn.show();
                 let titleElem = $("#edit-title");
-                let oldTitle = titleElem.text();
-                titleElem.replaceWith(`<div><input type="text" value="${oldTitle}" name="title"></div>`);
                 let contentElem = $("#edit-content");
-                let oldContent = contentElem.text();
-                contentElem.replaceWith(`<div><input type="text" value="${oldContent}" name="content"></div>`);
+                title = titleElem.text();
+                content = contentElem.text();
+                titleElem.replaceWith(`<div id="edit-title"><input type="text" value="${title}" name="title"></div>`);
+                contentElem.replaceWith(`<div id="edit-content"><input type="text" value="${content}" name="content"></div>`);
                 editBtn.text("Update");
             } else {
                 $("#blog-form").submit();
             }
+        });
+        cancelBtn.click(() => {
+            event.preventDefault();
+            cancelBtn.hide();
+            let titleElem = $("#edit-title");
+            let contentElem = $("#edit-content");
+            titleElem.replaceWith(`<h1 id="edit-title">${title}</h1>`);
+            contentElem.replaceWith(`<p id="edit-content">${content}</p>`);
+            editBtn.text("Edit");
         });
     });
 </script>
