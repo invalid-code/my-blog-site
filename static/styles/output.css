@@ -169,6 +169,9 @@
   .flex {
     display: flex;
   }
+  .hidden {
+    display: none;
+  }
   .flex-row {
     flex-direction: row;
   }

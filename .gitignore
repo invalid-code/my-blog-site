@@ -2,6 +2,6 @@ __pycache__
 .env*
 *.sqlite3
 node_modules
-staticfiles
 requirements.txt
-*.log
+logs
+staticfiles
