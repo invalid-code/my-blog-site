@@ -65,7 +65,7 @@ def blog_page(request, id: str):
                     logger.error(f"Couldn't update blog with blog id = {id}")
                 else:
                     logger.debug(f"Updated blog with blog id = {id}")
-                image = request.FILES.get("images")
+                image = request.FILES.get("image")
                 if image is not None:
                     image_file_dest = os.path.join(MEDIA_ROOT, id)
                     with open(image_file_dest, "wb+") as f:
