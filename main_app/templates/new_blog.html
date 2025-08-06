@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}New Blog{% endblock %}
 {% block content %}
-<form action="{% url 'new_blog' %}" method="post">
+<form action="{% url 'new_blog' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form }}
     <button type="submit">Create blog</button>

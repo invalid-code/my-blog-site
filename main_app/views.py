@@ -6,8 +6,6 @@ from django import forms
 from django.http import Http404, HttpResponseServerError
 from django.shortcuts import redirect, render
 
-from PIL import pillow
-
 from my_blog_website.settings import MEDIA_ROOT, client
 
 logger = logging.getLogger(__name__)
@@ -112,7 +110,7 @@ def new_blog_page(request):
                 return HttpResponseServerError(
                     "Error creating new blog".encode("utf-8")
                 )
-            image_file_dest = os.path.join(MEDIA_ROOT, result.inserted_id)
+            image_file_dest = os.path.join(MEDIA_ROOT, str(result.inserted_id))
             with open(image_file_dest, "wb+") as f:
                 for chunk in image.chunks():
                     f.write(chunk)

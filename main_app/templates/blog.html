@@ -9,6 +9,7 @@
     <h1 id="edit-title">{{ blog.title }}</h1>
     <p id="edit-content">{{ blog.content }}</p>
     <input type="hidden" name="action" value="update">
+    <img src="/media/{{ blog.id }}">
     <button type="button" id="edit-btn">Edit</button>
     <button type="button" id="cancel-btn">Cancel</button>
 </form>
